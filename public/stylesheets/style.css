@@ -6,3 +6,21 @@ body {
 a {
   color: #00B7FF;
 }
+
+body{
+  display:flex;
+  flex-direction:column;
+}
+
+footer{
+  margin-top:auto;
+}
+
+@media screen and (max-width: 480px) {
+  footer{
+    visibility: hidden;
+  }
+}
+
+
+

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1= title
+    a(href='/users/logout')
+        button(type='button') LOGOUT
+    ul
+    each tweet in tweets
+        li
+            p #{tweet}
+    a(href='/users/' + prevPage)
+        button(type='button') PREV
+    a(href='/users/' + nextPage)
+        button(type='button') NEXT

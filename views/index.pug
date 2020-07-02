@@ -2,7 +2,16 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  div(id="loginWrapper")
+    form(action="/login", method="post")
+      | USERNAME:
+      input(type="text", name='username', required)
+      | PASSWORD:
+      input(type="password", name="password", required)
+      button(type="submit") LOG IN
+      if loginError
+        p(style={color: 'red'})
+          | #{loginError}
   ul
     each tweet in tweets
       li
