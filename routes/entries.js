@@ -7,6 +7,8 @@ const { getTweets, deleteTweet, addTweet } = require('../dbHandler')
 router.get('/', csrfProtection, async function(req, res, next) {
     if(!req.session.loggedIn) res.redirect('../../')
     try {
+        let teacher = await isTeacher(db, req.session.loggedIn)
+        if(!teacher) res.redirect('../../')
         let db = req.app.locals.db;
         let tweets = await getTweets(db, req.session.loggedIn)
         res.render('entries', {title: 'Your feed', tweets: tweets, csrfToken: req.csrfToken()});

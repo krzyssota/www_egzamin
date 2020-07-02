@@ -28,10 +28,8 @@ router.post('/login', async function(req, res, next) {
 
 router.get('/requestTweets', async function(req, res, next) {
   try {
-    console.log('jestem w requestTweets ')
     let db =req.app.locals.db;
     let tweets = await getMostRecentTweets(db)
-    console.log('tweets w routerze', tweets)
     res.json(tweets)
   } catch (err){
     throw err;

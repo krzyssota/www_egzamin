@@ -1,0 +1,55 @@
+Minimum na 3
+
+    w index.js odczytaj poprawnie z bazy danych najnowsze (według pola timestamp) pięć wpisów
+    i wyświetl je użytkownikowi
+
+    zaimplementuj logowanie (na stronie głównej), które po podaniu poprawnie loginu i hasła przenosi na /users,
+    a po niepoprawnej próbie logowania pokazuje komunikat o błędnym loginie lub haśle (również na stronie głównej)
+
+    zaimplementuj wyświetlanie na stronie /users wpisów śledzonych użytkowników,
+
+    do strony /users powinni mieć dostęp jedynie zalogowani użytkownicy
+
+    zaimplementuj paginację na stronie /users
+
+    zaimplementuj wylogowywanie
+
+Odczytywanie ostatnich wpisów realizowane jest prze skrypt oslugujacy puga (patrz punkt JSON).
+Logowanie zrealizowalem za pomoca sesji connect-sqlite3. Po nieporawnym hasle przekierowuje na te sama strone z dodatkowym parametrem w url.
+users.pug wywświetla wpisy sledzonych użytkowników wykorzystując zapytanie sql z joinem.
+Jeśli w sesji nie ma zalogowanego użytkownika natychmiast jest on przekierowywany na storne glowna.
+Paginacja zrealizowana jest za pomoca dodatkowego parametru numeru strony w url.
+Wylogowywanie przez przycisk - usuwa on dane uzytkownika z sesji.
+
+Pug +0.5
+
+Zaimplementuj szablony w Pug:
+
+    wykorzystaj dziedziczenie szablonów (Template Inheritance),
+    dołącz CSS,
+    na każdej ze stron powinna pojawiać się stopka (użyj odpowiedniego tagu z HTML)
+    zawierająca napis: "Imię, Nazwisko egzamin WWW 2019 edycja 1"
+    stopka powinna się nie wyświetlać, jeśli szerokość strony jest poniżej 480px
+
+Dziedziczenie zrealizowane jest przez dziedziczenie szablonu layout.pug przez pozostałe szablony.
+css został zmodyfikowany.
+Stopka jest umieszona we wspomnianym layout.pug
+W css uwzlędniony został rozmiar ekranu.
+
+JSON +0.5
+
+Zaimplementuj dynamiczne ładowanie wpisów wyświetlanych na stronie głównej:
+zamiast być częścią szablonów powinny być one przesyłane jako JSON.
+Implementacja powinna zawierać JS uruchamiany po stronie przeglądarki oraz inny JS uruchamiany po stronie serwera.
+
+Obslugiwane jest to przez statycznie serwowany skrypt index.js z katalogu public/scripts za pomoca funkcji fetch.
+
+Formularz +0.5
+
+Zaimplementuj odporne na CSRF (użyj csurf) i SQL injection formularze: dodawania wpisu
+i usuwania własnych wpisów (/my_entries w users.js), dodawać i usuwać wpisy powinni móc tylko nauczyciele,
+przy dodawaniu wpisu powinno się automatycznie na bieżący czas ustawić pole timestamp (+0.5)
+
+Korzystam z biblioteki csurf podając csrfToken jako ukryte pole kluczowych formularzu. Nowe wpisy escape'uje też z htmlowych znaków
+by uniknać umieszczania wrogich skryptów na mojej stronie. Dodawać mogą tylko nauczyciele bo tylko oni moga dostac się na tę podstronę.
+Bieżacy czas ustawiany jest przez CURRENT_TIMESTAMP w sqlite3.
