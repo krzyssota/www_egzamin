@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    a(href='/users/logout')
+        button(type='button') LOGOUT
+    each tweet in tweets
+        li
+            p #{tweet[0]}
+            form(action="/users/my_entries/delete", method="post")
+                input(type="hidden" name="timestamp" value=tweet[1])
+                input(type="hidden" name="_csrf" value=csrfToken)
+                button(type="submit") DELETE
+    form(action="/users/my_entries/add", method="post")
+        | NEW TWEET:
+        input(type="text", name='tresc', required)
+        input(type="hidden" name="_csrf" value=csrfToken)
+        button(type="submit") SEND

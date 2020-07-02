@@ -4,6 +4,9 @@ block content
     h1= title
     a(href='/users/logout')
         button(type='button') LOGOUT
+    if teacher
+        a(href='/users/my_entries')
+            button(type='button') MY ENTRIES
     ul
     each tweet in tweets
         li

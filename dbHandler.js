@@ -54,14 +54,61 @@ function getSubscribedTweets(db, username, offset) {
     })
 }
 
-function addPost(post) {
+function isTeacher(db, username) {
     return new Promise((resolve, reject) => {
-        const db = openDB();
-        db.run(`INSERT INTO postsTable VALUES (?);`,
-            [post['msg']],
+        let sqlQuery = 'SELECT nauczyciel FROM osoba WHERE login=?;'
+        db.get(sqlQuery, [username], (err, row) => {
+            if(err) {
+                reject(new Error('Internal error while checking if teacher.'))
+                return;
+            }
+            if(row) {
+                if('1'.localeCompare(row.nauczyciel) === 0) {
+                    resolve(true)
+                }
+            }
+            resolve(false)
+        })
+    })
+}
+
+function getTweets(db, username) {
+    let posts = [];
+    return new Promise((resolve, reject) => {
+        let sqlQuery = 'SELECT tresc, timestamp FROM wpis WHERE login_osoby=?;'
+        db.all(sqlQuery, [username], (err, rows) => {
+            if(err) {
+                reject(new Error('Internal error while extracting tweets.'))
+                return;
+            }
+            for(let row of rows) {
+                posts.push([row.tresc, row.timestamp])
+            }
+            resolve(posts)
+        })
+    })
+}
+
+function deleteTweet(db, timestamp, username) {
+    return new Promise((resolve, reject) => {
+        let sqlQuery = 'DELETE FROM wpis WHERE login_osoby=? AND timestamp=?;'
+        db.run(sqlQuery, [username, timestamp], (err) => {
+            if(err) {
+                reject(new Error('Internal error while deleting tweets.'))
+                return;
+            }
+            resolve()
+        })
+    })
+}
+
+function addTweet(db, timestamp, username) {
+    return new Promise((resolve, reject) => {
+        db.run(`INSERT INTO wpis VALUES (?,CURRENT_TIMESTAMP, ?);`,
+            [username, timestamp],
             (err) => {
                 if(err) {
-                    reject(new Error('Internal error inserting msg.'))
+                    reject(new Error('Internal error inserting tweet.'))
                     return;
                 }
                 resolve()
@@ -72,3 +119,8 @@ function addPost(post) {
 exports.getMostRecentTweets = getMostRecentTweets;
 exports.correctPassword = correctPassword
 exports.getSubscribedTweets = getSubscribedTweets
+exports.isTeacher = isTeacher
+exports.getTweets = getTweets
+exports.deleteTweet = deleteTweet
+exports.addTweet = addTweet
+

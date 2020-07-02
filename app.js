@@ -9,11 +9,15 @@ var connectSqlite = require('connect-sqlite3')
 var SqliteStore = connectSqlite(session);
 const secretString = '102101101108032116104101032098101114110'
 
+var csurf = require('csurf')
+const csrfProtection = csurf({ cookie: true });
+
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('baza.db');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var entriesRouter = require('./routes/entries')
 
 var app = express();
 
@@ -40,7 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use('/users/my_entries', csrfProtection, entriesRouter);
 
 
 // catch 404 and forward to error handler

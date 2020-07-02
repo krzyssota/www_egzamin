@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  script(src='/scripts/index.js')
   h1= title
   div(id="loginWrapper")
     form(action="/login", method="post")
@@ -12,7 +13,5 @@ block content
       if loginError
         p(style={color: 'red'})
           | #{loginError}
-  ul
-    each tweet in tweets
-      li
-        p #{tweet}
+  ul(id="list")
+
